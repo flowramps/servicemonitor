@@ -1,0 +1,1 @@
+helm upgrade prometheus prometheus-community/kube-prometheus-stack --namespace prometheus --values values.yaml

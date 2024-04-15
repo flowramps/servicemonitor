@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1  # Versão da API para objetos de Ingress
+kind: Ingress  # Tipo de objeto Kubernetes
+metadata:
+  name: bifrost-ingress  # Nome atribuído ao Ingress
+  namespace: dev  # Namespace onde o Ingress será criado
+  labels:  # Rótulos atribuídos ao Ingress
+    app: bifrost  # Rótulo para identificar a qual aplicação este Ingress pertence
+spec:
+  ingressClassName: nginx  # Nome da classe de Ingress usada para definir as regras de configuração
+  rules:  # Regras de roteamento de tráfego
+    - host: bifrost.127.0.0.1.nip.io  # Nome do host para o qual o tráfego será roteado
+      http:  # Configurações específicas para o protocolo HTTP
+        paths:  # Caminhos a serem correspondidos
+        - path: /  # Caminho correspondido
+          pathType: Prefix  # Tipo de correspondência de caminho (Prefix corresponde a qualquer caminho que tenha o prefixo especificado)
+          backend:  # Configurações do backend para onde o tráfego será enviado
+            service:  # Especifica o serviço de backend para o qual o tráfego será enviado
+              name: bifrost-service  # Nome do serviço de backend
+              port:  # Porta do serviço de backend
+                number: 8080  # Número da porta do serviço de backend

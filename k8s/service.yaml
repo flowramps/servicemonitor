@@ -1,0 +1,19 @@
+apiVersion: v1  # Versão da API
+kind: Service  # Tipo de objeto Kubernetes
+metadata:
+  name: bifrost-service  # Nome atribuído ao serviço
+  namespace: dev  # Namespace onde o serviço será criado
+  annotations:  # Anotações adicionadas ao serviço
+    prometheus.io/port: "metrics"  # Porta para Prometheus coletar métricas
+    prometheus.io/scrape: "true"   # Indica que Prometheus deve coletar métricas deste serviço
+  labels:  # Rótulos atribuídos ao serviço
+    app.kubernetes.io/part-of: bifrost  # Rótulo que identifica a qual aplicação este serviço pertence
+spec:
+  type: ClusterIP  # Tipo de serviço, no caso, um ClusterIP
+  selector:  # Seletor de pods que este serviço irá direcionar o tráfego
+    app: bifrost-my-service  # O serviço direcionará tráfego para pods com o rótulo 'app: bifrost-my-service'
+  ports:  # Definição das portas expostas pelo serviço
+    - port: 8080  # Porta do serviço
+      protocol: TCP  # Protocolo usado (TCP neste caso)
+      targetPort: 8080  # Porta em que os pods do serviço estão escutando
+      name: "metrics"  # Nome da porta, usada para identificação

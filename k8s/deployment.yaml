@@ -1,0 +1,35 @@
+apiVersion: apps/v1  # Versão da API
+kind: Deployment  # Tipo de objeto Kubernetes
+metadata:
+  name: bifrost-my-service-deployment  # Nome atribuído ao deployment
+  namespace: dev  # Namespace onde o deployment será criado
+spec:
+  replicas: 1  # Número de réplicas desejadas para este deployment
+  selector:  # Seletor de pods gerenciados por este deployment
+    matchLabels:  # Rótulos que devem ser correspondidos para a seleção de pods
+      app: bifrost-my-service  # Rótulo que identifica os pods gerenciados por este deployment
+  strategy:  # Estratégia de atualização do deployment
+    rollingUpdate:  # Atualização rolling (em cascata)
+      maxSurge: 1  # Número máximo de pods extras que podem ser criados acima do número desejado durante uma atualização
+      maxUnavailable: 1  # Número máximo de pods que podem ficar indisponíveis durante uma atualização
+  minReadySeconds: 5  # Tempo mínimo que um novo pod deve estar pronto antes de ser considerado disponível
+  template:  # Template para os pods gerenciados pelo deployment
+    metadata:
+      namespace: dev  # Namespace dos pods
+      labels:  # Rótulos atribuídos aos pods
+        app: bifrost-my-service  # Rótulo que identifica os pods gerenciados por este deployment
+    spec:
+      nodeSelector:  # Seletor de nós onde os pods devem ser programados
+        kubernetes.io/os: linux  # Restringe os pods a nós com sistema operacional Linux
+      containers:  # Definição dos containers nos pods
+        - name: bifrost-my-service-pod  # Nome do container
+          image: rampss/bifrost:latest  # Imagem do container a ser usada
+          ports:  # Portas expostas pelo container
+            - containerPort: 8080  # Porta em que o container está escutando
+          resources:  # Recursos alocados para o container
+            requests:  # Recursos solicitados
+              cpu: 250m  # 250 milicores de CPU
+              memory: 250Mi  # 250 Mebibytes de memória
+            limits:  # Limites máximos de recursos
+              cpu: 500m  # 500 milicores de CPU
+              memory: 500Mi  # 500 Mebibytes de memória
