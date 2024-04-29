@@ -1,8 +1,11 @@
 apiVersion: monitoring.coreos.com/v1  # Especifica a versão da API
 kind: ServiceMonitor  # Define o tipo de objeto Kubernetes
+
 metadata:
   name: bifrost-service-monitor  # Nome atribuído ao ServiceMonitor
   namespace: prometheus  # Namespace onde o ServiceMonitor será criado
+  labels:
+    release: prometheus # Essencial para que funcione o Servicemonitor, release do prometheus!
 spec:
   endpoints:  # Define os endpoints a serem monitorados
     - interval: 15s  # Intervalo de raspagem dos endpoints
